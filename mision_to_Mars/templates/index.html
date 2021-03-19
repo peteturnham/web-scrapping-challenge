@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Mars Data</title>
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  
+  <!-- ALL BLACK BACKGROUND -->
+  <style>
+      body{
+          background-color:black;
+      }
+  </style>
+</head>
+
+<body>
+    <!-- container -->
+  <div class="container-fluid">
+      <!-- button with jumbotron -->
+    <div class="jumbotron text-center">
+      <h1 class="display-4" style="color: tomato">Welcome To Mars</h1>
+      <a class="btn btn-lg text-white" style="background-color:#949494; color: white" href="scrape" role="button">Scrape New Mars Data</a>
+    </div>
+    
+    <!-- add recent news -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="media">
+            <div class="media-body">
+                <h2 style="color:yellow">The Most Recent Mars News</h2>
+                <h4 class="medi-heading" style="color:tomato"><b>{{mars_data.header}}</b></h4>
+                <h5 style="color:white"><p>{{mars_data.paragraph}}</p></h5>
+            </div>
+        </div>
+    </div>
+</div>
+  <!-- add featured image -->
+  <div class="row">
+      <div class="col-md-9">
+          <h2 style="color:yellow"><b>Featured Mars Image</b></h2>
+          <img src = "{{mars_data.path}}" class="img-responsive">
+      </div>
+  </div>
+
+  <!-- add HTML table with mars facts -->
+  <div class="row">
+    <h3 style="color: yellow">Mars Facts</h3>
+    <div class="col-md-12" style="color: white">
+      {{mars_data.html_mars_table | safe}}
+    </div>
+  </div>
+</div>
+</div>
+<div class="row" style="margin-top: 80px;">
+    <div class="page-header">
+      <h2 class="text-center" style="color: white"><b>Mars Hemispheres</b></h2>
+    </div>
+    {% for hemisphere in mars_data.hemisphere_image_urls %}
+      <div class="col-md-6">
+        <div class="thumbnail">
+          <img src="{{mars_data.mars_hemi_dict}}">
+          <div class="caption">
+            <h3><b>{{hemisphere.title}}</b></h3>
+          </div>
+        </div>
+      </div>
+      {% endfor %}
+  </div>
+</div>
+</body>
+
+</html>

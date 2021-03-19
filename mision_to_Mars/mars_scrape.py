@@ -1,12 +1,16 @@
 #dependencies
 import pandas as pd
-import splinter 
+from splinter import Browser
 from bs4 import BeautifulSoup as bs
 from webdriver_manager.chrome import ChromeDriverManager
+import time
+
 
 def init_browser():
-    executable_path = {'executable_path': ChromeDriverManager().install()}
-    return Browser('chrome', **executable_path, headless=False)
+    executable_path = {"executable_path": ChromeDriverManager().install()}
+    return Browser("chrome", **executable_path, headless=False)
+
+
 
 #web scraping 
 def scrape():
@@ -14,7 +18,9 @@ def scrape():
     #link as variable
     url = 'https://mars.nasa.gov/news/'
     #commencing website connection
+    browser = init_browser()
     browser.visit(url)
+    time.sleep(1)
     html = browser.html
     soup = bs(html,'html.parser')
     #storing results in 
@@ -32,6 +38,7 @@ def scrape():
     url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
     #commencing website connection
     browser.visit(url)
+    time.sleep(1)
     # scrap data into soup
     html = browser.html
     soup = bs(html,'html.parser')
@@ -50,13 +57,14 @@ def scrape():
 # scraping data to create html table
     url = 'https://space-facts.com/mars/'
     tables = pd.read_html(url)
+    df = tables[0]
     html_table = df.to_html()
     html_mars_table=html_table.replace('\n','')
     # mars.db.insert_one(html_mars_table)
 #############################################################
 # scraping news site for hi res images for each hemisphere and their url's
     browser.visit('https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars')
-    #limit calls to 1 every minute
+    #limit calls 
     time.sleep(1)
     # Scrape page into Soup
     html = browser.html
