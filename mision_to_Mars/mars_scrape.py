@@ -6,6 +6,8 @@ from webdriver_manager.chrome import ChromeDriverManager
 import time
 
 
+
+
 def init_browser():
     executable_path = {"executable_path": ChromeDriverManager().install()}
     return Browser("chrome", **executable_path, headless=False)
@@ -28,11 +30,12 @@ def scrape():
 
     for result in results:
         #storing relevant data in variables
-        header = result.find('div', class_= 'content_title')
-        paragraph = result.find('div', class_='article_teaser_body')
+        header = result.find('div', class_= 'content_title').text
+        paragraph = result.find('div', class_='article_teaser_body').text
         #quit browser
-        browser.quit()        
+        browser.quit() 
 #############################################################
+    browser = init_browser()
     #scarping data for featured image
     #url as variable
     url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
@@ -52,16 +55,16 @@ def scrape():
     browser.quit()
     #storing path as variable to push to mongoDB
     featured_post = path
-    # mars.db.insert_one(featured_post)
 #############################################################
+    browser = init_browser()
 # scraping data to create html table
     url = 'https://space-facts.com/mars/'
     tables = pd.read_html(url)
     df = tables[0]
     html_table = df.to_html()
     html_mars_table=html_table.replace('\n','')
-    # mars.db.insert_one(html_mars_table)
 #############################################################
+    browser = init_browser()
 # scraping news site for hi res images for each hemisphere and their url's
     browser.visit('https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars')
     #limit calls 
@@ -119,14 +122,14 @@ def scrape():
         hemisphere_image_urls.append(mars_hemi_dict)
         #quit browser
         browser.quit()
-        # db.mars_data.insert(mars_hemi_dict)
 
 #############################################################
 # uploading data to mongoDB 
     mars_data = {}
-
     mars_data['header']= header
     mars_data['paragraph']=paragraph
-    mars_data['featured image']=path
-    mars_data['hemisphere images']= mars_hemi_dict
+    mars_data['featured_image']=featured_post
+    mars_data['facts'] = html_mars_table
+    for dict in mars_hemi_dict:
+        mars_data['hemisphere_images']= mars_hemi_dict
     return mars_data 
