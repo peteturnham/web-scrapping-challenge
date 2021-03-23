@@ -11,7 +11,7 @@
   <!-- ALL BLACK BACKGROUND -->
   <style>
       body{
-          background-color:black;
+          background-color:white;
       }
   </style>
 </head>
@@ -30,51 +30,43 @@
     <div class="col-md-12">
         <div class="media">
             <div class="media-body">
-                <h2 style="color:yellow">The Most Recent Mars News</h2>
+                <h2 style="color:black">The Most Recent Mars News</h2>
                 <h4 class="medi-heading" style="color:tomato"><b>{{mars_data.header}}</b></h4>
-                <h5 style="color:white"><p>{{mars_data.paragraph}}</p></h5>
+                <h5 style="color:black"><p>{{mars_data.paragraph}}</p></h5>
             </div>
         </div>
     </div>
 </div>
   <!-- add featured image -->
   <div class="row">
-      <div class="col-md-9">
-          <h2 style="color:yellow"><b>Featured Mars Image</b></h2>
+      <div class="col-md-6">
+        <div class="box">
+          <h2 style="color:black"><b>Featured Mars Image</b></h2>
           <img src = "{{mars_data.featured_image}}" class="img-responsive">
-      </div>
-  </div>
-
+        </div>
+    </div>
   <!-- add HTML table with mars facts -->
-  <div class="row">
     <br>
-    <div class="table-responsive" style="overflow-x:auto; overflow-y:auto; max-height:470px; max-width: auto;"> 
-      <table border="1" class="table table-dark table-hover">
-                                                         
-    <h3 style="color: yellow">Mars Facts</h3>
-    <div class="col-md-12" style="color: white">
-      {{mars_data.facts}}
+    <div class="row">
+      <div class="col-md-6">
+      <div class="table-responsive" style="overflow-x:auto; overflow-y:auto; max-height:470px; max-width: auto;"> 
+        <table border="1" class="table table-dark table-hover">
+                                                           
+      <h3 style="color: black">Mars Facts</h3>
+      <div class="col-md-12" style="color: white">
+        {{mars_data.facts|safe}}
+      </div>
     </div>
   </div>
   </div>
-  </div>
-</div>
-</div>
 <div class="row" style="margin-top: 80px;">
-    <div class="page-header">
-      <h2 class="text-center" style="color: white"><b>Mars Hemispheres</b></h2>
-    </div>
-    {% for hemisphere in mars_data.hemisphere_image_urls %}
+      <h2 class="text-center" style="color: black"><b>Mars Hemispheres</b></h2>
       <div class="col-md-6">
         <div class="thumbnail">
-          <img src="{{mars_data.mars_hemi_dict}}">
-          <div class="caption">
-            <h3><b>{{mars_data.hemisphere_images}}</b></h3>
+          <img src="{{mars_data.Mars_Images}}" class="img-responsive">
           </div>
         </div>
       </div>
-      {% endfor %}
-  </div>
 </div>
 </body>
 

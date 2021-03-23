@@ -64,10 +64,11 @@ def scrape():
     html_table = df.to_html()
     html_mars_table=html_table.replace('\n','')
 #############################################################
-    browser = init_browser()
-# scraping news site for hi res images for each hemisphere and their url's
+    executable_path = {'executable_path': ChromeDriverManager().install()}
+    browser = Browser('chrome', **executable_path, headless=False)
+    
     browser.visit('https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars')
-    #limit calls 
+    #limit calls to 1 every minute
     time.sleep(1)
     # Scrape page into Soup
     html = browser.html
@@ -92,7 +93,7 @@ def scrape():
             thumbnail_url = 'https://astrogeology.usgs.gov/' + thumbnail['href']
             # Append list with links
             thumbnail_links.append(thumbnail_url)
-    full_imgs = []
+    full_imgs = {}
     #itereate through 
     for url in thumbnail_links:
         # Click through each thumbanil link
@@ -105,8 +106,8 @@ def scrape():
         # Combine the reltaive image path to get the full url
         img_link = 'https://astrogeology.usgs.gov/' + relative_img_path
         # Add full image links to a list
-        full_imgs.append(img_link)
-    # Zip together the list of hemisphere names and hemisphere image links
+        full_imgs=img_link
+    # # Zip together the list of hemisphere names and hemisphere image links
     mars_hemi_zip = zip(hemi_names, full_imgs)
     #hemiphsere img url varibale
     hemisphere_image_urls = []
@@ -120,7 +121,6 @@ def scrape():
         mars_hemi_dict['img_url'] = img
         # Append the list with dictionaries
         hemisphere_image_urls.append(mars_hemi_dict)
-        #quit browser
         browser.quit()
 
 #############################################################
@@ -130,6 +130,5 @@ def scrape():
     mars_data['paragraph']=paragraph
     mars_data['featured_image']=featured_post
     mars_data['facts'] = html_mars_table
-    for dict in mars_hemi_dict:
-        mars_data['hemisphere_images']= mars_hemi_dict
+    mars_data['Mars_Images'] = full_imgs
     return mars_data 
