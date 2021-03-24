@@ -35,7 +35,7 @@ def scrape():
 
     mongo.db.mars.update({}, mars_data, upsert=True)
     #return to home page
-    return render_template("index.html", mars_data = mars_data)
+    return render_template("index.html",mars_data = mars_data)
 
 
 if __name__ == "__main__":

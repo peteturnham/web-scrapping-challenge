@@ -33,9 +33,9 @@ def scrape():
         header = result.find('div', class_= 'content_title').text
         paragraph = result.find('div', class_='article_teaser_body').text
         #quit browser
-        browser.quit() 
+         
 #############################################################
-    browser = init_browser()
+    
     #scarping data for featured image
     #url as variable
     url = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/index.html'
@@ -52,24 +52,20 @@ def scrape():
 
     path = 'https://data-class-jpl-space.s3.amazonaws.com/JPL_Space/' +href
     #quit browser
-    browser.quit()
+    
     #storing path as variable to push to mongoDB
     featured_post = path
 #############################################################
-    browser = init_browser()
+    
 # scraping data to create html table
     url = 'https://space-facts.com/mars/'
     tables = pd.read_html(url)
     df = tables[0]
     html_table = df.to_html()
     html_mars_table=html_table.replace('\n','')
-#############################################################
-    executable_path = {'executable_path': ChromeDriverManager().install()}
-    browser = Browser('chrome', **executable_path, headless=False)
     
+#############################################################
     browser.visit('https://astrogeology.usgs.gov/search/results?q=hemisphere+enhanced&k1=target&v1=Mars')
-    #limit calls to 1 every minute
-    time.sleep(1)
     # Scrape page into Soup
     html = browser.html
     soup = bs(html, 'html.parser')
@@ -118,11 +114,11 @@ def scrape():
         # Add hemisphere title to dictionary
         mars_hemi_dict['title'] = title
         # Add image url to dictionary
-        mars_hemi_dict['img_url'] = img
+        mars_hemi_dict['img_url'] = img_link
         # Append the list with dictionaries
         hemisphere_image_urls.append(mars_hemi_dict)
         browser.quit()
-
+#*****************************************************************************************************************************************
 #############################################################
 # uploading data to mongoDB 
     mars_data = {}
@@ -130,5 +126,5 @@ def scrape():
     mars_data['paragraph']=paragraph
     mars_data['featured_image']=featured_post
     mars_data['facts'] = html_mars_table
-    mars_data['Mars_Images'] = full_imgs
+    mars_data['Mars_Images'] = hemisphere_image_urls
     return mars_data 
